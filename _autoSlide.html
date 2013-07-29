@@ -1,0 +1,52 @@
+<!doctype HTML>
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title>jquery.flipsnap.js | Demo</title>
+<script src="http://code.jquery.com/jquery-2.0.2.min.js"></script>
+<script src="js/flipsnap.js"></script>
+<script src="js/jquery.flipsnap.js"></script>
+<style>
+	img {
+		max-width: 100%;
+	}
+
+	.viewport {
+		overflow: hidden;
+	}
+	.item{
+		margin: 0 10px;
+		font-size: 50px;
+		text-align: center;
+		padding: 50px 0;
+		background: #EFEFEF;
+		border: 5px solid #999;
+		float: left;
+		color: #666;
+		box-sizing: border-box;
+	}
+</style>
+<section class="demo" id="demo-autoSlide">
+	<h3>autoSlide</h3>
+	<div class="viewport">
+		<div class="flipsnap">
+			<div class="item">1</div>
+			<div class="item">2</div>
+			<div class="item">3</div>
+			<div class="item">4</div>
+			<div class="item">5</div>
+			<div class="item">6</div>
+			<div class="item">7</div>
+			<div class="item">8</div>
+			<div class="item">9</div>
+			<div class="item">10</div>
+		</div>
+	</div>
+
+	<script>
+		$('#demo-autoSlide').flipsnap({
+			autoSlide : true
+		});
+	</script>
+</section>
