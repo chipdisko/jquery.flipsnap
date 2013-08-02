@@ -215,21 +215,38 @@
 
 		plugin.autoSlide = function(time){
 			if(!plugin.settings.autoSlide){return}
+
 			var $flipsnap = $(plugin.flipsnap.element); //$container かも
 
-			var timer;
-
+			var timerId;
 			function setSlideTimer(){
-				console.log('setTimer');
-				timer = setInterval( function(){
-					if( plugin.flipsnap.hasNext() ){
-						plugin.flipsnap.toNext();
-					} else {
-						plugin.flipsnap.moveToPoint(0);
-					}
+
+				if( plugin.flipsnap.hasNext() ){
+					plugin.flipsnap.toNext();
+				} else {
+					plugin.flipsnap.moveToPoint(0);
+				}
+
+				timerId = setTimeout( function(){
+					setSlideTimer()
 				}, time);
+
+
 			}
 			setSlideTimer();
+
+			var reTimerId = setTimeout(function(){},0);
+			$(window).on('scroll', function(){
+				clearTimeout(timerId);
+				clearTimeout(reTimerId);
+				console.log('set reTimerId')
+				reTimerId = setTimeout( function(){
+					console.log('set timerId')
+					timerId = setTimeout( function(){
+						setSlideTimer()
+					}, time);
+				},200);
+			});
 
 			$flipsnap.on('fstouchstart', function(e){
 				console.log('clearTimer')
