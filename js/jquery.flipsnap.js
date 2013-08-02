@@ -63,7 +63,7 @@
 			// カスタマイズ不可
 			this.sliderOptions = {
 				distance: slideViewSize,
-				disable3d : (isAndroid)
+				disable3d : (isAndroid2)
 			};
 
 			var itemWidth =  Math.round(
@@ -211,51 +211,40 @@
 		/**
 		 * 自動スライド機能
 		 * @param time {number} 自動スライドする待ち時間
+		 * jQuery Mobileの event.special.scrollstartが無いと動きません。
 		 */
 
 		plugin.autoSlide = function(time){
-			if(!plugin.settings.autoSlide){return}
+			if( !plugin.settings.autoSlide ){return}
 
 			var $flipsnap = $(plugin.flipsnap.element); //$container かも
 
-			var timerId;
+			var timerId = setTimeout(function(){},0);
 			function setSlideTimer(){
-
 				if( plugin.flipsnap.hasNext() ){
 					plugin.flipsnap.toNext();
 				} else {
 					plugin.flipsnap.moveToPoint(0);
 				}
-
 				timerId = setTimeout( function(){
 					setSlideTimer()
 				}, time);
 
-
 			}
 			setSlideTimer();
 
-			var reTimerId = setTimeout(function(){},0);
-			$(window).on('scroll', function(){
+			function stopAutoSlide() {
 				clearTimeout(timerId);
-				clearTimeout(reTimerId);
-				console.log('set reTimerId')
-				reTimerId = setTimeout( function(){
-					console.log('set timerId')
-					timerId = setTimeout( function(){
-						setSlideTimer()
-					}, time);
-				},200);
-			});
-
-			$flipsnap.on('fstouchstart', function(e){
-				console.log('clearTimer')
-				clearInterval(timer);
-			});
-
-			$flipsnap.on('fstouchend', function(e){
-				setSlideTimer();
-			});
+			}
+			function restartAudoSlide() {
+				clearTimeout(timerId);
+				timerId = setTimeout( function(){
+					setSlideTimer()
+				}, time);
+			}
+			$flipsnap
+				.on('fstouchstart', stopAutoSlide)
+				.on('fstouchend', restartAudoSlide);
 
 		};
 		plugin.autoSlide(plugin.settings.slideInterval);
